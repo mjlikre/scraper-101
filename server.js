@@ -8,7 +8,7 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 
 
-var PORT = 3002;
+const PORT = process.env.PORT || 3002;
 
 // Initialize Express
 var app = express();
