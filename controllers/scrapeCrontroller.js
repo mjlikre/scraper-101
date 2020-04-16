@@ -67,7 +67,7 @@ module.exports = {
         await axios.get(amazon_base_query)
             .then(function(response) { 
                 let $amazon = cheerio.load(response.data);
-                    
+                console.log("getting amazon")
                 $amazon("div.s-matching-dir div.sg-col-inner span[data-component-type|='s-search-results'] div.s-result-list div.s-result-item").each(function(i, element) {
                     let amazon = []
                     $amazon(this)
@@ -93,29 +93,33 @@ module.exports = {
                     if (amazon[1] === " Best Seller"){
                         let cleaned = {
                             item_name : "",
-                            item_price_0 : ""
+                            item_price : ""
                         }
                         for (let i = 0; i < amazon.length; i ++) { 
                             if (amazon[i][1] >= "0" && amazon[i][1]<= "9"){
-                                cleaned.item_name = amazon[i-1]
+                                cleaned.item_name = amazon[i-2] + ", " + amazon[i-1] 
+                                break
+                            }else if(amazon[i][1] === "$"){
+                                cleaned.item_name = amazon[i-2] + ", " + amazon[i-1] 
                                 break
                             }
                             
                         }
                         for (let i = 0; i < amazon.length; i ++) { 
                             if (amazon[i][1] === "$" && amazon[i+1][1] === "$"){
-                                cleaned.item_price_0 = "$"+amazon[i].split("$")[1]
+                                cleaned.item_price = "$"+amazon[i].split("$")[1]
                                 cleaned.item_price_1 = "$"+amazon[i+1].split("$")[1]
                                 break
                                 
                             }
                             else if(amazon[i][1] === "$"){
-                                cleaned.item_price_0 = "$"+amazon[i].split("$")[1]
+                                cleaned.item_price = "$"+amazon[i].split("$")[1]
                                 break
                             }
                         }
                         amazon_data.push(cleaned)
                         console.log(amazon)
+                        console.log(cleaned)
                         
                     }
 
@@ -128,11 +132,9 @@ module.exports = {
             .catch(function(err){
                 console.log(err)
             })
-            // console.log(amazon_data)
-            // console.log(ebay_data)
 
         
-        res.json({amazon: amazon_data[1], ebay: ebay_data[1]});
+        res.json({amazon: amazon_data[0], ebay: ebay_data[1]});
         
     }
       
