@@ -3,9 +3,7 @@ const cheerio = require("cheerio");
 
 module.exports = {
     pop: async (req, res) =>  {
-        console.log(req.body.item_name)
         const query_items = req.body.item_name.split(" ")
-        console.log(query_items)
         
         let query = "";
         for (let i = 0; i < query_items.length; i ++) { 
@@ -67,7 +65,6 @@ module.exports = {
         await axios.get(amazon_base_query)
             .then(function(response) { 
                 let $amazon = cheerio.load(response.data);
-                console.log("getting amazon")
                 $amazon("div.s-matching-dir div.sg-col-inner span[data-component-type|='s-search-results'] div.s-result-list div.s-result-item").each(function(i, element) {
                     let amazon = []
                     $amazon(this)
@@ -118,8 +115,6 @@ module.exports = {
                             }
                         }
                         amazon_data.push(cleaned)
-                        console.log(amazon)
-                        console.log(cleaned)
                         
                     }
 
