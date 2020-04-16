@@ -3,7 +3,8 @@ const cheerio = require("cheerio");
 
 module.exports = {
     pop: async (req, res) =>  {
-        const query_items = req.body.item_name.split(" ")
+        console.log(req.query)
+        const query_items = req.query.item_name.split(" ")
         
         let query = "";
         for (let i = 0; i < query_items.length; i ++) { 
@@ -130,6 +131,7 @@ module.exports = {
 
         
         res.json({amazon: amazon_data[0], ebay: ebay_data[1]});
+        // res.send(req.query)
         
     }
       
