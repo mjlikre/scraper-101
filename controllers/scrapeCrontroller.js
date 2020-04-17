@@ -118,7 +118,20 @@ module.exports = {
         });
       })
       .catch(function (err) {
-        console.log(err);
+        if (err.response){
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+          console.log("Request made and server responded");
+        }
+        else if(err.request){
+          console.log(err.request);
+        }
+        else{
+          console.log("something wen't wrong with amazon, can't get the data");
+          console.log(err)
+        }
+        
       });
     //   console.log(ebay_data)
     res.json({ amazon: amazon_data[0], ebay: ebay_data[matches.indexOf(Math.max(...matches))] });
